@@ -1,2 +1,3 @@
 docker-compose.yml
 wiki-data
+docker-compose-rancher.yml

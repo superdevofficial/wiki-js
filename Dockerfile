@@ -20,6 +20,7 @@ ENV PACKAGES="\
   nodejs-npm \
   bash \
   supervisor \
+  openssh-client \
 "
 
 RUN apk --update add --no-cache $PACKAGES  \
