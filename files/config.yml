@@ -9,29 +9,29 @@
 # Title of this site
 # ---------------------------------------------------------------------
 
-title: Structa IT Wiki
+title: $(WIKI_TITLE)
 
 # ---------------------------------------------------------------------
 # Full public path to the site, without the trailing slash
 # ---------------------------------------------------------------------
 # INCLUDE CLIENT PORT IF NOT 80/443!
 
-host: http://localhost
+host: $(WIKI_HOST)
 
 # ---------------------------------------------------------------------
 # Port the main server should listen to (80 by default)
 # ---------------------------------------------------------------------
 # To use process.env.PORT, comment the line below:
 
-port: 3000
+port: $(WIKI_PORT)
 
 # ---------------------------------------------------------------------
 # Data Directories
 # ---------------------------------------------------------------------
 
 paths:
-  repo: ./repo
-  data: ./data
+  repo: $(WIKI_REPO_PATH)
+  data: $(WIKI_DATA_PATH)
 
 # ---------------------------------------------------------------------
 # Upload Limits
@@ -39,15 +39,15 @@ paths:
 # In megabytes (MB)
 
 uploads:
-  maxImageFileSize: 3
-  maxOtherFileSize: 100
+  maxImageFileSize: 4
+  maxOtherFileSize: 20
 
 # ---------------------------------------------------------------------
 # Site Language
 # ---------------------------------------------------------------------
 # Possible values: en, de, es, fa, fr, ja, ko, nl, pt, ru, sr, tr or zh
 
-lang: en
+lang: $(WIKI_LANG)
 
 # Enable for right to left languages (e.g. arabic):
 langRtl: false
@@ -63,11 +63,11 @@ auth:
   local:
     enabled: true
   google:
-    enabled: true
+    enabled: false
     clientId: GOOGLE_CLIENT_ID
     clientSecret: GOOGLE_CLIENT_SECRET
   microsoft:
-    enabled: true
+    enabled: false
     clientId: MS_APP_ID
     clientSecret: MS_APP_SECRET
   facebook:
@@ -109,31 +109,31 @@ sessionSecret: lekkerbydiesee817fuej38vlenc843hsabdje84jdkdnfjfu
 # Database Connection String
 # ---------------------------------------------------------------------
 
-db: mongodb://localhost:27017/wiki
+db: $(WIKI_MONGO)
 
 # ---------------------------------------------------------------------
 # Git Connection Info
 # ---------------------------------------------------------------------
 
 git:
-  url: https://github.com/Organization/Repo
+  url: $(WIKI_GIT_URL)
   branch: master
   auth:
 
     # Type: basic or ssh
-    type: ssh
+    type: $(WIKI_GIT_TYPE)
 
     # Only for Basic authentication:
-    username: marty
-    password: MartyMcFly88
+    username: $(WIKI_GIT_USERNAME)
+    password: $(WIKI_GIT_PASSWORD)
 
     # Only for SSH authentication:
-    privateKey: /etc/wiki/keys/git.pem
+    privateKey: $(WIKI_GIT_KEY_PATH)
 
-    sslVerify: true
+    sslVerify: $(WIKI_GIT_SSL_VERIFY)
 
   # Default email to use as commit author
-  serverEmail: marty@example.com
+  serverEmail: $(WIKI_GIT_EMAIL)
 
   # Whether to use user email as author in commits
   showUserEmail: true

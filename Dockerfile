@@ -3,8 +3,7 @@ FROM alpine:3.6
 ENV ALPINE_VERSION=3.6
 
 # Install needed packages. Notes:
-#   * nodejs: Node.js and NPM 
-#   * mongodb: MongoDB to act as DB.
+#   * nodejs: Node.js and NPM
 #   * Git: Git to store wiki-js documents
 #   * Curl: Curl for downloads.
 #   * nodejs-npm: Required for Wikijs install
@@ -14,13 +13,8 @@ ENV ALPINE_VERSION=3.6
 # Set work directory for WikiJS install
 WORKDIR /var/wiki
 
-# Replace with your email address:
-ENV WIKI_ADMIN_EMAIL charles@structa.co.uk
-
-
 ENV PACKAGES="\
   nodejs \
-  mongodb \
   git \
   curl \
   nodejs-npm \
@@ -29,18 +23,32 @@ ENV PACKAGES="\
 "
 
 RUN apk --update add --no-cache $PACKAGES  \
-    && echo 
+    && echo
+
+RUN VERSION=$(curl -L -s -S https://beta.requarks.io/api/version/stable) && \
+  	echo "[1/3] Fetching latest build..." && \
+  	curl -L -s -S https://github.com/Requarks/wiki/releases/download/v$VERSION/wiki-js.tar.gz | tar xz -C . && \
+  	echo "[2/3] Fetching dependencies..." && \
+  	curl -L -s -S https://github.com/Requarks/wiki/releases/download/v$VERSION/node_modules.tar.gz | tar xz -C .
+
+RUN rm  config.sample.yml
+
+# Create Wikijs user with no login or password
+RUN adduser -h /var/wiki -D -S  wikijs
+
+# Correct permissions on /var/wiki
+RUN chown -R wikijs:nogroup /var/wiki
 
 
 # Add files
 ADD files/supervisord.conf /etc/supervisord.conf
 # Replace your-config.yml with the path to your config file:
-# ADD files/config-structa.yml /var/wiki/config.yml
+ADD files/config.yml /var/wiki/config.yml
 
 # Expose port 3000 for Wikijs
 EXPOSE 3000
 
 # Entrypoint
-ADD start2.sh /
-RUN chmod u+x /start2.sh
-CMD /start2.sh
+ADD start.sh /
+RUN chmod u+x /start.sh
+CMD /start.sh
